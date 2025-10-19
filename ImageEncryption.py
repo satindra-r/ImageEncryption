@@ -32,6 +32,7 @@ def encrypt(key, img, scale):
 	dct_img_fixed_encrypted_msb = np.zeros(size).astype(np.int32)
 	for i in range(size[0]):
 		dct_bytes = dct_img_fixed_msb[i].tobytes()
+		# TODO: implement 2D CBC for more security
 		cipher = AES.new(key, AES.MODE_ECB)
 		cipher_bytes = cipher.encrypt(dct_bytes)
 		dct_img_fixed_encrypted_msb[i] = np.frombuffer(cipher_bytes, dtype=np.int32)
@@ -74,7 +75,7 @@ def decrypt(key, img_encrypted):
 
 	dct_img = dct_img_fixed.astype(np.float128) / fixed_point
 
-	#add bias back to image
+	# add bias back to image
 	img = idct2(dct_img) + 127
 	return img
 
